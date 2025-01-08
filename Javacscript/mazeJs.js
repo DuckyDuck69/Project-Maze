@@ -18,29 +18,32 @@ let lastFrame = 0; //time of the last frame
 let fps = 100;
 let frame = 1000/fps;
 
-var current;
+var current; //the current cell assign to a variable
 
-document.addEventListener('DOMContentLoaded', function() {
+var x_cor, y_cor;
+
+document.addEventListener('DOMContentLoaded', function() {    //make sure DOM is loaded before update difficulty 
     const difficultySelect = document.querySelector('select[name="difficultyList"]');
     difficultySelect.addEventListener('change', function(e) {
         difficulty = e.target.value;
         updateDifficulty();
     });
+    MoveTheBox();
 });
 
 function updateDifficulty(){
     switch(difficulty){
         case "1":
             size = 70;
-            fps = 10;       
+            fps = 20;       
             break;
         case "2":
             size = 40;
-            fps = 20;
+            fps = 30;
             break;
         case "3":
             size = 30;
-            fps = 40;
+            fps = 50;
             break;
         case "4":
             size = 20;
@@ -50,6 +53,9 @@ function updateDifficulty(){
     ctx.clearRect(0, 0, myCanvas.width, myCanvas.height); 
     console.log(myCanvas.width);
     frame = 1000/fps;
+    grid = [];
+    stack = []
+    current = null;
 }
 
 function doMaze(){
@@ -86,6 +92,7 @@ function doMaze(){
     ctx.fillRect(10, 10, size, size); 
 }
 
+
 function draw(){
     ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
     for(var i =0; i < grid.length; i++){
@@ -106,7 +113,7 @@ function draw(){
     }else if (stack.length>0){
         current = stack.pop();
     }
-    mazeGen = requestAnimationFrame(loop);
+    mazeGen = requestAnimationFrame(loop); 
 }
 
 function Cell(x, y){
@@ -124,11 +131,11 @@ function Cell(x, y){
     this.checkNeighbor = function(){
         var neighbor = [];
 
-        var top = grid[index(x, y - 1)];
-        var right = grid[index(x + 1, y)];
-        var bottom = grid[index(x, y+1)];
-        var left = grid[index(x - 1, y)];
-        
+        var top = grid[index(x, y - 1)];       //top cell
+        var right = grid[index(x + 1, y)];     //right cell
+        var bottom = grid[index(x, y+1)];      //bottom cell
+        var left = grid[index(x - 1, y)];      //left cell
+        //check the neighbors of the cells
         if(top && !top.visited){
             neighbor.push(top);
         }
@@ -169,8 +176,9 @@ function Cell(x, y){
         if(this.visited){
             rectVisited(x_coor, y_coor, size, size);
         }
-    }   
-}
+    }
+}   
+
 
 function line(x1, y1, x2, y2) {
     x1 = Math.floor(x1) + 0.5;
@@ -210,7 +218,11 @@ function loop(currentTime){ //the automatically value provided by requestAnimati
     }
     if (stack.length >= 0 || current.checkNeighbor()) {  //only if the maze is still generating that we continue drawing
         mazeGen = requestAnimationFrame(loop);
-    }else {
+    }
+    if(x_cor==0 && y_cor==0){
+        isRunning = false;
+    }
+    else {
         drawBorder(); 
     }
 }
@@ -250,4 +262,24 @@ function stopGen(){
 function resumeGen(){
     isRunning = true;
     mazeGen = requestAnimationFrame(loop);
+}
+
+function MoveTheBox(){
+    //WASD to move and solve the maze
+window.addEventListener('keydown', (event)=>{
+    switch (event.key){
+        case 'w':
+            console.log("w");
+            break;
+        case 'a':
+            console.log("a");
+            break;
+        case 's':
+            console.log("s");
+            break;
+        case 'd':
+            console.log("d");
+            break;
+    }
+});
 }
