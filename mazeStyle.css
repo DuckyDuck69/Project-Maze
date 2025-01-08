@@ -25,6 +25,9 @@ select {
 select>option {
     background-color: #b8e1ba;
 }
+.instruction{
+    text-align: center;
+}
 #select-items:hover {
     background-color: #7180AC;
 }
