@@ -83,7 +83,7 @@ function doMaze(){
     for (var y =0; y < rows; y++){
         for (var x = 0; x < collumns; x++){ 
             var cell = new Cell(x,y);
-            grid.push(cell);   //put the new objects in array grid
+            grid.push(cell);   //put the new objects in array grid, make them a Cell object
         }
     }
     current = grid[0];  //set initial cell
@@ -203,6 +203,12 @@ function rectCurrent(x, y, width, height){
     ctx.fillRect(x, y, width, height); 
 }
 
+function rectPlaying(x, y, width, height){
+    ctx.clearRect(0, 0, myCanvas.width, myCanvas.height)
+    ctx.fillStyle = red;
+    ctx.fillRect(x,y,width,height);
+}
+
 function index(x, y){
     if(x < 0 || y < 0 || x > collumns - 1 || y > rows - 1){   //if the cell is off the edge
         return -1; 
@@ -264,22 +270,50 @@ function resumeGen(){
     mazeGen = requestAnimationFrame(loop);
 }
 
-function MoveTheBox(){
+function StartPlaying(){
+    var x_box = size /2;
+    var y_box = size / 2;
+    rectPlaying(x_box, y_box, width, height)
+    
+}
+
+function MoveTheBox(x, y){
     //WASD to move and solve the maze
 window.addEventListener('keydown', (event)=>{
     switch (event.key){
         case 'w':
             console.log("w");
-            break;
+            if(y > 0 || y != null){
+                y -= size
+                return y;
+            }else{
+                break;
+            }
         case 'a':
             console.log("a");
-            break;
+            if(x > 0 || x!= null){
+                x -= size;
+                return x;
+            }
+            else{
+                break;
+            }          
         case 's':
             console.log("s");
-            break;
+            if(y < myCanvas.height - size || y != null){
+                y += size
+                return y;
+            }else{
+                break;
+            }
         case 'd':
             console.log("d");
-            break;
+            if(x < myCanvas.width - size || y != null){
+                x += size
+                return x;
+            }else{
+                break;
+            }
     }
 });
 }
