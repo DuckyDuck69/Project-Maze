@@ -283,7 +283,7 @@ window.addEventListener('keydown', (event)=>{
     switch (event.key){
         case 'w':
             console.log("w");
-            if(y > 0 || y != null){
+            if(y > 0 || y != null){                              //going up
                 y -= size
                 return y;
             }else{
@@ -291,7 +291,7 @@ window.addEventListener('keydown', (event)=>{
             }
         case 'a':
             console.log("a");
-            if(x > 0 || x!= null){
+            if(x > 0 || x!= null){                               //going left
                 x -= size;
                 return x;
             }
@@ -300,7 +300,7 @@ window.addEventListener('keydown', (event)=>{
             }          
         case 's':
             console.log("s");
-            if(y < myCanvas.height - size || y != null){
+            if(y < myCanvas.height - size || y != null){        //going down
                 y += size
                 return y;
             }else{
@@ -308,7 +308,7 @@ window.addEventListener('keydown', (event)=>{
             }
         case 'd':
             console.log("d");
-            if(x < myCanvas.width - size || y != null){
+            if(x < myCanvas.width - size || y != null){         //going right
                 x += size
                 return x;
             }else{
