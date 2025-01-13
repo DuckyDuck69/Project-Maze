@@ -90,6 +90,10 @@ function doMaze(){
     draw();
     ctx.fillStyle = 'blue';
     ctx.fillRect(10, 10, size, size); 
+    if(!loop()){
+        StartPlaying();
+        console.log('Pay');
+    }
 }
 
 
@@ -205,7 +209,7 @@ function rectCurrent(x, y, width, height){
 
 function rectPlaying(x, y, width, height){
     ctx.clearRect(0, 0, myCanvas.width, myCanvas.height)
-    ctx.fillStyle = red;
+    ctx.fillStyle = 'red';
     ctx.fillRect(x,y,width,height);
 }
 
@@ -225,7 +229,7 @@ function loop(currentTime){ //the automatically value provided by requestAnimati
     if (stack.length >= 0 || current.checkNeighbor()) {  //only if the maze is still generating that we continue drawing
         mazeGen = requestAnimationFrame(loop);
     }
-    if(x_cor==0 && y_cor==0){
+    if(x_cor==0 && y_cor==0){ //stop drawing if the 
         isRunning = false;
     }
     else {
@@ -271,49 +275,59 @@ function resumeGen(){
 }
 
 function StartPlaying(){
+    box = new Cell;
     var x_box = size /2;
     var y_box = size / 2;
-    rectPlaying(x_box, y_box, width, height)
-    
+    rectPlaying(x_box, y_box, size, size)
+    MoveTheBox(box, x_box, y_box);
 }
 
-function MoveTheBox(x, y){
+function MoveTheBox(a, x, y){
     //WASD to move and solve the maze
-window.addEventListener('keydown', (event)=>{
-    switch (event.key){
-        case 'w':
-            console.log("w");
-            if(y > 0 || y != null){                              //going up
-                y -= size
-                return y;
-            }else{
-                break;
-            }
-        case 'a':
-            console.log("a");
-            if(x > 0 || x!= null){                               //going left
-                x -= size;
-                return x;
-            }
-            else{
-                break;
-            }          
-        case 's':
-            console.log("s");
-            if(y < myCanvas.height - size || y != null){        //going down
-                y += size
-                return y;
-            }else{
-                break;
-            }
-        case 'd':
-            console.log("d");
-            if(x < myCanvas.width - size || y != null){         //going right
-                x += size
-                return x;
-            }else{
-                break;
-            }
-    }
-});
+    window.addEventListener('keydown', (event)=>{
+        switch (event.key){
+            case 'w':
+                console.log("w");
+                if((y > 0 || y != null) && !a.walls[0]){      //going up
+                        ctx.clearRect(x, y, size, size)
+                        y -= size
+                        a = grid[index(a.x, a.y -1)];         //update the cell 
+                        rectPlaying(x, y, size, size);
+                }
+                else{
+                    break;
+                }
+            case 'a':
+                console.log("a");
+                if((x > 0 || x!= null) && !a.walls[4]){  
+                    ctx.clearRect(x, y, size, size)                        //going left
+                    x -= size;
+                    a = grid[index(a.x - 1, a.y)];
+                    rectPlaying(x, y, size, size);
+                }
+                else{
+                    break;
+                }          
+            case 's':
+                console.log("s");
+                if((y < myCanvas.height - size || y != null) && !a.walls[2]){     //going down
+                        ctx.clearRect(x, y, size, size)
+                        y += size
+                        a = grid[index(a.x, a.y + 1)];    
+                        rectPlaying(x, y, size, size);
+                }else{
+                    break;
+                }
+            case 'd':
+                console.log("d");
+                if((x < myCanvas.width - size || y != null) && !a.walls[1]){         //going right
+                        ctx.clearRect(x, y, size, size)
+                        x += size
+                        a = grid[index(a.x + 1, a.y)];
+                        rectPlaying(x, y, size, size);
+                }else{
+                    break;
+                }
+        }
+    });
 }
